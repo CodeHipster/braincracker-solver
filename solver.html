@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Title of the document</title>
+</head>
+
+<body>
+    
+<script>
+
+function Letter(letter){
+    this.letter = letter;
+}
+
+Letter.prototype.digit = 0;
+Letter.prototype.toString = function(){
+    return `${this.letter} = ${this.digit}`;
+}
+
+var letters = [
+    new Letter("a"),
+    new Letter("b"),
+    new Letter("c"),
+    new Letter("d"),
+    new Letter("e"),
+    new Letter("f"),
+    new Letter("g"),
+    new Letter("h"),
+    new Letter("j"),
+    new Letter("k")];
+
+var a = letters[0], 
+b = letters[1],
+c = letters[2],
+d = letters[3],
+e = letters[4],
+f = letters[5],
+g = letters[6],
+h = letters[7],
+j = letters[8],
+k = letters[9];
+
+var options = [0,1,2,3,4,5,6,7,8,9];
+
+
+
+function solved(){
+    //functions
+    var A1 = h.digit;
+    var A2 = parseInt("" + e.digit + b.digit + g.digit);
+    var A3 = parseInt("" + k.digit + b.digit + e.digit + f.digit);
+    var B1 = parseInt("" + k.digit + c.digit + h.digit);
+    var B2 = parseInt("" + k.digit + a.digit + f.digit);
+    var B3 = parseInt("" + b.digit + k.digit + e.digit);
+    var C1 = parseInt("" + a.digit + b.digit + b.digit + d.digit);
+    var C2 = parseInt("" + j.digit + f.digit + b.digit);
+    var C3 = parseInt("" + k.digit + c.digit + a.digit + e.digit);
+
+    if( A1 * A2 == A3 &&
+        B1 + B2 == B3 &&
+        C1 + C2 == C3 &&
+        A1 * B1 == C1 &&
+        A2 + B2 == C2 &&
+        A3 - B3 == C3){
+            //console.log("got it: ",a.digit, b.digit, c.digit, d.digit, e.digit, f.digit, g.digit, h.digit, j.digit, k.digit);
+            console.log("got it: " + letters);
+            return true;
+        }else {
+            //console.log("nope: " ,a.digit, b.digit, c.digit, d.digit, e.digit, f.digit, g.digit, h.digit, j.digit, k.digit);
+            //console.log("nope: " + letters);
+            return false;
+        }
+}
+
+function startSolving(){
+    var start = Date.now();
+    if(options.length >= letters.length){
+        //use shallow copies.
+        var solved = solve(letters.slice(0), options.slice(0));
+        if(!solved){            
+            document.getElementById("solution").innerHTML = `There were no solutions.`;
+        }else{
+            document.getElementById("solution").innerHTML = `Solution is: ${letters}`;
+        }
+        var duration = Date.now() - start;
+        document.getElementById("duration").innerHTML = `Took ${duration} miliseconds`;
+
+    }else{
+        console.error("we need more options then letters.");
+    }
+}
+
+function solve(letters, options){
+    //console.log(`solve: letters:${letters} \noptions: ${options}`);
+    var letter = letters.pop();
+    if(!letter){
+        return solved();
+    }
+
+    var remainingOptions;
+    for(var i = 0; i < options.length; i++){
+        letter.digit = options[i];
+        remainingOptions = options.slice(0);
+        remainingOptions.splice(i,1);
+        if(solve(letters, remainingOptions)) return true;
+    }
+    //push the letter back in.
+    letters.push(letter);
+    return false;
+}
+
+</script>
+
+<button onclick="startSolving()">solve!</button>
+<p id="solution"></p>
+<p id="duration"></p>
+
+
+</body>
+
+</html>
